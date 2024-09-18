@@ -1,20 +1,26 @@
 interface Locale {
-  id: number;
   cg_name: string;
   cg_slug: string;
 }
 
+interface ProductLocale {
+  en?: ItemLocale;
+  ru?: ItemLocale;
+}
+
 interface Level {
   id: number;
-  locale: {
-    en?: Locale;
-    ru?: Locale;
-  };
+  locale: ProductLocale;
   depth: number;
 }
 
 interface ParentLevel extends Level {
   childs: Level[];
+  path_to_top?: Level[];
+}
+
+interface CategoryType extends ParentLevel {
+  parent: Level;
 }
 
 interface TaskObject {
@@ -23,4 +29,4 @@ interface TaskObject {
   };
 }
 
-export default TaskObject;
+export { ProductLocale, Level, ParentLevel, CategoryType, TaskObject };
