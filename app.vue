@@ -9,7 +9,7 @@ if (treeObject) {
 </script>
 
 <template>
-  <div>
+  <div class="pt-10 font-sans">
     <NuxtPage />
   </div>
 </template>

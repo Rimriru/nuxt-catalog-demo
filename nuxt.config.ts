@@ -9,4 +9,11 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1'
     }
   },
-})
+  css: ['~/assets/styles/main.css'],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {}
+    }
+  }
+});

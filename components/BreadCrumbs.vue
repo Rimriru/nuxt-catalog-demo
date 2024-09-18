@@ -17,6 +17,7 @@ const props = defineProps<{
   locale: Locale;
   title: string;
 }>();
+defineExpose({ link });
 
 const treeData = computed(() => {
   const tree = catalogTreeState.value?.page_data.tree[0];
@@ -110,7 +111,6 @@ watch(
   () => props.locale,
   () => {
     const id = link.value.elementId;
-    console.log(breadCrumbs.value);
     const breadCrumbsElement = breadCrumbs.value.find((el) => el.id === id);
     if (breadCrumbsElement) link.value.text = breadCrumbsElement.linkText;
   }
@@ -135,31 +135,38 @@ const onBreadCrumbsElementClick = (id: number, linkText: string) => {
 };
 
 const onProductsElementClick = (product: Level) => {
-  currentChild.value = product;
+  currentChild.value = { ...product };
 };
 </script>
 
 <template>
-  <main>
-    <nav>
+  <section>
+    <nav class="mb-4">
       <ul>
         <li
-          v-for="{ id, name, linkText } of breadCrumbs"
+          v-for="({ id, linkText, name }, index) of breadCrumbs"
           :key="id"
           @click="onBreadCrumbsElementClick(id, linkText)"
+          class="hover:underline hover:opacity-70 cursor-pointer"
         >
-          {{ name }}
+          <p v-if="link.elementId !== category.id || index !== 2">
+            {{ name }}
+            <span v-if="index < breadCrumbs.length - 1">&rarr;</span>
+          </p>
         </li>
       </ul>
     </nav>
-    <ul v-if="link.elementId === category.id">
-      Товары:
-      <li v-for="product of products" @click="onProductsElementClick(product)">
+    <ul v-show="link.elementId === category.id" class="pl-4">
+      <p class="text-lg text-neutral-500">Товары в данной категории:</p>
+      <li
+        v-for="product of products"
+        @click="onProductsElementClick(product)"
+        class="hover:underline hover:opacity-70 cursor-pointer pl-4"
+      >
         {{ getLocaleData(product.locale).name }}
       </li>
     </ul>
-    <span>{{ link.text }}</span>
-  </main>
+  </section>
 </template>
 
 <style scoped></style>
